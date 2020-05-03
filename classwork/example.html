@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What did that time say?</title>
+    <!-- For SEO, the description should be around 160 characters -->
+    <meta
+      name="description"
+      content="Example web page showing some dynamically updating content with multiple functions"
+    />
+  </head>
+
+  <body>
+    <main id="main">
+      <section class="container">
+        <header>
+          <h1 class="mt-4 mb-4">
+            This is a way of displaying some timestamps!
+          </h1>
+        </header>
+
+        <h2 class="mb-4">
+          Some timestamps below, note how we get the data and process it using
+          the package!
+        </h2>
+
+        <!-- Note how the different formats are accepted by Timeago -->
+        <div class="row">
+          <div class="col-4">
+            <p id="timeStampOne">2020-03-20</p>
+          </div>
+          <div class="col-4">
+            <p id="timeStampTwo">01-01-2020</p>
+          </div>
+          <div class="col-4">
+            <p id="timeStampThree"></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bootstrap Scripts -->
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Import in the script from Timeago, we already have Jquery imported from Bootstrap! -->
+    <!-- Timeago gives you user friendly information for how long ago a certain time was -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.6.7/jquery.timeago.min.js"></script>
+
+    <!-- This script tag needs to be underneath the jQuery imports like Timeago so that it's available when this code is executed -->
+    <!-- This could also be lifted into a separate "script.js" file! -->
+    <script>
+      /*
+        What is it that I am planning out to do?
+
+        I'm trying to return timestamps in a 'Fuzzy' format such as 'a moment ago' or '3 months ago'
+
+        1. Pull through a JavaScript library that will help me with a task, so in this case import Timeago
+        2. Get the timestamps that are in the <p> tags and update them using the timeago function.
+        3. Use jQuery to do the things!
+      */
+
+      $(document).ready(function () {
+        function useTimeago(index, text) {
+          //Get the Text that is in the html, and store that in our own variable to use/mutate
+          const currentText = text;
+
+          /*  
+            Use the timeago function to manipulate our text value in the DOM
+
+            The documentation says to use jquery.timeago(), but we're used to using jQuery with the dollar notation jQuery() = $()
+
+            From the docs: z
+            jQuery.timeago("2008-07-17");           //=> "12 years ago"
+
+            So we can pass our current text to this timeago() method a timestamp, and it will convert it for us!
+
+            Not all libraries and imports will plug into Jquery like this, they could be their own method call such as 'something()'
+          */
+          const fuzzyFormattedDate = $.timeago(text);
+
+          //Return the value back to the method.
+          return fuzzyFormattedDate;
+        }
+
+        /*
+          This function is declared exactly the same as:
+          function getCurrentTime() {
+            //Function content
+          }
+          however the `this` context is not being bound the same. 
+          
+          Reading: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
+        */
+        const getCurrentTime = () => {
+          //Ignore 'new' for now, Date() is a built in function to return current date/time
+          const currentDateTime = new Date();
+
+          //Use the timeago function like we did before.
+          return $.timeago(currentDateTime);
+        };
+
+        // There's an argument we could refactor the html to use better ids/data and then use $.each() on a html collection
+        $("#timeStampOne").text(useTimeago);
+        $("#timeStampTwo").text(useTimeago);
+        $("#timeStampThree").text(getCurrentTime);
+      });
+    </script>
+  </body>
+</html>
